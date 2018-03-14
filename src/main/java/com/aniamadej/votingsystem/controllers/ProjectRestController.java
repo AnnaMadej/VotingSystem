@@ -12,8 +12,13 @@ import java.util.List;
 @RestController
 public class ProjectRestController {
 
+
+    private ProjectService projectService;
+
     @Autowired
-    public ProjectService projectService;
+    public ProjectRestController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping("/api/projects")
     public ResponseEntity<List<ProjectDto>> getProjects(){
