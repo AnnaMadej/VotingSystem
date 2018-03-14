@@ -49,39 +49,38 @@ public class ProjectService {
         return projectDtos;
     }
 
-    public String vote(Long projectId, Long voterId, Integer voteValue){
+    public Boolean vote(Long projectId, Long voterId, Integer voteValue){
         Vote vote = new Vote();
 
         Optional<Voter> optionalVoter = votersRepository.findById(voterId);
         Optional<Project> optionalProject = projectRepository.findById(projectId);
 
-        if (!optionalProject.isPresent()) return "invalid project";
+        if (!optionalProject.isPresent()) return false;
             Project project = optionalProject.get();
             project.addVote(vote);
 
-        if(!optionalProject.get().isActive()) return "this project is not active!";
+        if(!optionalProject.get().isActive()) return false;
 
-        if (!optionalVoter.isPresent())  return  "invalid voter";
+        if (!optionalVoter.isPresent())  return  false;
             vote.setVoter(optionalVoter.get());
 
-        if (voteRepository.existsByVoterAndProject(vote.getVoter(), vote.getProject())) return "multiple vote!";
+        if (voteRepository.existsByVoterAndProject(vote.getVoter(), vote.getProject())) return false;
 
         vote.setVoteValue(voteValue);
         voteRepository.save(vote);
-        return "OK";
+        return true;
     }
 
-    public String deactivateProject(Long projectId) {
+    public Boolean deactivateProject(Long projectId) {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
 
-
         if (!optionalProject.isPresent()) {
-            return "invalid projectId";
+            return false;
         }
         Project project = optionalProject.get();
         project.setActive(false);
         projectRepository.save(project);
-        return "OK";
+        return true;
 
     }
 

@@ -21,10 +21,14 @@ public class ProjectMapperService {
 
     public ProjectWithVotesDto mapProject(Project project){
         ProjectWithVotesDto projectWithVotesDto = modelMapper.map(project, ProjectWithVotesDto.class);
+        int positiveVotes = 0;
+        int negativeVotes = 0;
         for (Vote vote : project.getVotes()) {
-            if(vote.getVoteValue()>0) projectWithVotesDto.incPositives();
-            else projectWithVotesDto.incNegatives();
+            if(vote.getVoteValue()>0) positiveVotes++;
+            else negativeVotes++;
         }
+        projectWithVotesDto.setPositiveVotes(positiveVotes);
+        projectWithVotesDto.setNegativeVotes(negativeVotes);
       return projectWithVotesDto;
     }
 }

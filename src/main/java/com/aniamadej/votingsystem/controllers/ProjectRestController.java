@@ -20,26 +20,31 @@ public class ProjectRestController {
         return ResponseEntity.ok().body( projectService.getProjects());
     }
 
-    @PostMapping("/api/vote")
-    public ResponseEntity<String> vote(@RequestParam ("projectId") Long projectId, @RequestParam ("voterId") Long voterId, @RequestParam("voteValue") Integer voteValue){
+    @PostMapping("/api/project/{projectId}/vote")
+    public ResponseEntity<Boolean> vote(@PathVariable ("projectId") Long projectId, @RequestParam ("voterId") Long voterId, @RequestParam("voteValue") Integer voteValue){
 
-        String message = projectService.vote(projectId, voterId, voteValue);
-        if (message.equals("OK")) return ResponseEntity.ok().body(message);
-        return ResponseEntity.badRequest().body(message);
+        Boolean result = projectService.vote(projectId, voterId, voteValue);
+        if (!result) { return ResponseEntity.badRequest().body(result);
+        }
+        return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping ("/api/deactivateProject/{projectId}")
-    public ResponseEntity<String> deactivate(@PathVariable ("projectId") Long projectId){
-        String message = projectService.deactivateProject(projectId);
-        if (message.equals("OK")) return ResponseEntity.ok().body(message);
-        return ResponseEntity.badRequest().body(message);
+    @PutMapping ("/api/project/{projectId}/deactivate")
+    public ResponseEntity<Boolean> deactivate(@PathVariable ("projectId") Long projectId){
+        Boolean result = projectService.deactivateProject(projectId);
+        if (!result) {
+            return ResponseEntity.badRequest().body(result);
+        }
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping ("/api/project/{projectId}")
-    public ResponseEntity<ProjectDto> getProjject(@PathVariable("projectId") Long projectId) {
+    public ResponseEntity<ProjectDto> getProject(@PathVariable("projectId") Long projectId) {
         ProjectDto projectDto = projectService.getProject(projectId);
 
-        if(projectDto.getId()==null) return ResponseEntity.badRequest().body(projectDto);
-        return ResponseEntity.ok().body(projectDto);
+        if (projectDto.getId() != null) {
+            return ResponseEntity.ok().body(projectDto);
+        }
+        return ResponseEntity.badRequest().body(projectDto);
     }
 }
