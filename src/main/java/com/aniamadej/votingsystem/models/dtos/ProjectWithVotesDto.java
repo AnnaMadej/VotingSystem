@@ -5,7 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProjectWithVotesDto extends ProjectDto {
+public class ProjectWithVotesDto{
+    private String projectName;
+    private String projectDescription;
+    private boolean active;
     private int positiveVotes = 0;
     private int negativeVotes = 0;
 }
