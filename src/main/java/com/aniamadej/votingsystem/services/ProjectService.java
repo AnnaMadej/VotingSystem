@@ -89,9 +89,8 @@ public class ProjectService {
 
     public ProjectWithVotesDto getProject(Long projectId) {
         ProjectWithVotesDto projectWithVotesDto = new ProjectWithVotesDto();
-        Optional<Project> optionalProject = projectRepository.findById(projectId);
-        if (optionalProject.isPresent()){
-            projectWithVotesDto = fullProjectMapperService.map(optionalProject.get());
+        if (projectRepository.existsById(projectId)){
+            projectWithVotesDto = projectRepository.getProjectWithVotesDto(projectId);
         }
         return projectWithVotesDto;
     }
