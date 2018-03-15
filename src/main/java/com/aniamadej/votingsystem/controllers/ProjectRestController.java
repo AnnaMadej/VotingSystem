@@ -1,6 +1,7 @@
 package com.aniamadej.votingsystem.controllers;
 
 import com.aniamadej.votingsystem.models.dtos.ProjectDto;
+import com.aniamadej.votingsystem.models.dtos.ProjectWithVotesDto;
 import com.aniamadej.votingsystem.models.dtos.VoteDto;
 import com.aniamadej.votingsystem.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,14 @@ public class ProjectRestController {
     }
 
     @GetMapping ("/api/project/{projectId}")
-    public ResponseEntity<ProjectDto> getProject(@PathVariable("projectId") Long projectId) {
-        ProjectDto projectDto = projectService.getProject(projectId);
+    public ResponseEntity<ProjectWithVotesDto> getProject(@PathVariable("projectId") Long projectId) {
+        ProjectWithVotesDto projectWithVotesDto = projectService.getProject(projectId);
 
-        if (projectDto.getId() != null) {
-            return ResponseEntity.ok().body(projectDto);
+        if (projectWithVotesDto.getId() != null) {
+            return ResponseEntity.ok().body(projectWithVotesDto);
         }
-        return ResponseEntity.badRequest().body(projectDto);
+        return ResponseEntity.badRequest().body(projectWithVotesDto);
     }
+
+
 }

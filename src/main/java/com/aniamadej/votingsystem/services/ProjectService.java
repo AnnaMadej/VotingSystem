@@ -20,17 +20,20 @@ public class ProjectService {
     private ProjectRepository projectRepository;
     private VotersRepository votersRepository;
     private VoteRepository voteRepository;
+    private ProjectMapper<ProjectWithVotesDto> fullProjectMapperService;
     private ModelMapper modelMapper;
-    private ProjectMapperService projectMapperService;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, VotersRepository votersRepository, VoteRepository voteRepository, ModelMapper modelMapper, ProjectMapperService projectMapperService) {
+    public ProjectService(ProjectRepository projectRepository, VotersRepository votersRepository, VoteRepository voteRepository, FullProjectMapperService fullProjectMapperService, ModelMapper modelMapper) {
         this.projectRepository = projectRepository;
         this.votersRepository = votersRepository;
         this.voteRepository = voteRepository;
+        this.fullProjectMapperService = fullProjectMapperService;
         this.modelMapper = modelMapper;
-        this.projectMapperService = projectMapperService;
     }
+
+
+
 
     public List<ProjectDto> getProjects(){
         List<Project> projects = projectRepository.findAllByOrderByProjectName();
@@ -88,7 +91,7 @@ public class ProjectService {
         ProjectWithVotesDto projectWithVotesDto = new ProjectWithVotesDto();
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()){
-            projectWithVotesDto = projectMapperService.mapProject(optionalProject.get());
+            projectWithVotesDto = fullProjectMapperService.map(optionalProject.get());
         }
         return projectWithVotesDto;
     }
