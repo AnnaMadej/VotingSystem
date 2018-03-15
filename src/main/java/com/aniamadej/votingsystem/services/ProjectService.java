@@ -88,7 +88,10 @@ public class ProjectService {
     }
 
     public ProjectWithVotesDto getProject(Long projectId) {
-        ProjectWithVotesDto projectWithVotesDto = projectRepository.getProjectWithVotesDto();
+        ProjectWithVotesDto projectWithVotesDto = new ProjectWithVotesDto();
+        if (projectRepository.existsById(projectId)){
+            projectWithVotesDto = projectRepository.getProjectWithVotesDto(projectId);
+        }
         return projectWithVotesDto;
     }
 }

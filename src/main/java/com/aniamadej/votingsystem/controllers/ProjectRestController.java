@@ -48,7 +48,7 @@ public class ProjectRestController {
     public ResponseEntity<ProjectWithVotesDto> getProject(@PathVariable("projectId") Long projectId) {
         ProjectWithVotesDto projectWithVotesDto = projectService.getProject(projectId);
 
-        if (projectWithVotesDto.getId() != null) {
+        if (projectWithVotesDto.getProjectName() != null) {
             return ResponseEntity.ok().body(projectWithVotesDto);
         }
         return ResponseEntity.badRequest().body(projectWithVotesDto);
