@@ -1,5 +1,4 @@
 package com.aniamadej.votingsystem.services;
-
 import com.aniamadej.votingsystem.models.dtos.ProjectDto;
 import com.aniamadej.votingsystem.models.dtos.ProjectWithVotesDto;
 import com.aniamadej.votingsystem.models.entities.Project;
@@ -58,16 +57,16 @@ public class ProjectService {
         Optional<Voter> optionalVoter = votersRepository.findById(voterId);
         Optional<Project> optionalProject = projectRepository.findById(projectId);
 
-        if (!optionalProject.isPresent()) return false;
+        if (!optionalProject.isPresent()) throw new RuntimeException("Project doesn't exist!");//return false;
             Project project = optionalProject.get();
             project.addVote(vote);
 
-        if(!optionalProject.get().isActive()) return false;
+        if(!optionalProject.get().isActive())  throw new RuntimeException("Project is not active!");//return false;
 
-        if (!optionalVoter.isPresent())  return  false;
+        if (!optionalVoter.isPresent())   throw new RuntimeException("Voter doesn't exist!");//return  false;
             vote.setVoter(optionalVoter.get());
 
-        if (voteRepository.existsByVoterAndProject(vote.getVoter(), vote.getProject())) return false;
+        if (voteRepository.existsByVoterAndProject(vote.getVoter(), vote.getProject()))  throw new RuntimeException("Multiple voting is not allowed!");//return false;
 
         vote.setVoteValue(voteValue);
         voteRepository.save(vote);
@@ -81,14 +80,20 @@ public class ProjectService {
             return false;
         }
         Project project = optionalProject.get();
-        project.setActive(false);
-        projectRepository.save(project);
+        if(project.isActive()) {
+            project.setActive(false);
+            projectRepository.save(project);
+        }
         return true;
 
     }
 
     public ProjectWithVotesDto getProject(Long projectId) {
         ProjectWithVotesDto projectWithVotesDto = new ProjectWithVotesDto();
+        // Optional<Project> optionalProject = projectRepository.findById(projectId);
+        // if (optionalProject.isPresent()){
+        //     projectWithVotesDto = fullProjectMapperService.map(optionalProject.get());
+        //  }
         if (projectRepository.existsById(projectId)){
             projectWithVotesDto = projectRepository.getProjectWithVotesDto(projectId);
         }

@@ -19,7 +19,7 @@ public class Project {
     private String projectDescription;
     private boolean active;
 
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Set<Vote> votes;
 
     public Project(String projectName, String projectDescription, boolean active) {

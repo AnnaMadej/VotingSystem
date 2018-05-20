@@ -5,6 +5,7 @@ import com.aniamadej.votingsystem.models.dtos.ProjectWithVotesDto;
 import com.aniamadej.votingsystem.models.dtos.VoteDto;
 import com.aniamadej.votingsystem.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,6 @@ public class ProjectRestController {
     public ResponseEntity<Boolean> vote(@PathVariable ("projectId") Long projectId, @RequestParam ("voterId") Long voterId, @RequestParam("voteValue") Integer voteValue){
 
         Boolean result = projectService.vote(projectId, voterId, voteValue);
-        if (!result) { return ResponseEntity.badRequest().body(result);
-        }
         return ResponseEntity.ok().body(result);
     }
 
@@ -46,13 +45,12 @@ public class ProjectRestController {
 
     @GetMapping ("/api/project/{projectId}")
     public ResponseEntity<ProjectWithVotesDto> getProject(@PathVariable("projectId") Long projectId) {
-        ProjectWithVotesDto projectWithVotesDto = projectService.getProject(projectId);
+        ProjectWithVotesDto git diffprojectWithVotesDto = projectService.getProject(projectId);
 
         if (projectWithVotesDto.getProjectName() != null) {
             return ResponseEntity.ok().body(projectWithVotesDto);
         }
-        return ResponseEntity.badRequest().body(projectWithVotesDto);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(projectWithVotesDto);
     }
-
 
 }
