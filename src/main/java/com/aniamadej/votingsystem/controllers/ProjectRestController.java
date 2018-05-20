@@ -45,7 +45,7 @@ public class ProjectRestController {
 
     @GetMapping ("/api/project/{projectId}")
     public ResponseEntity<ProjectWithVotesDto> getProject(@PathVariable("projectId") Long projectId) {
-        ProjectWithVotesDto git diffprojectWithVotesDto = projectService.getProject(projectId);
+        ProjectWithVotesDto projectWithVotesDto = projectService.getProject(projectId);
 
         if (projectWithVotesDto.getProjectName() != null) {
             return ResponseEntity.ok().body(projectWithVotesDto);
